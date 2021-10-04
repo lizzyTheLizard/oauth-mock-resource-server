@@ -11,7 +11,7 @@ class InfoController {
       const token = this.tokenVerifier.decodeToken(base64Token);
       const keyOrSecret = await this.secretGetter.getSecret(token);
       this.tokenVerifier.verifyToken(base64Token, keyOrSecret);
-      res.sendStatus(200).json(token);
+      res.status(200).json(token.payload);
     } catch (error) {
       next(error);
     }

@@ -25,14 +25,18 @@ class TokenVerifierService {
   }
 
   public decodeToken(base64Token: string): Jwt {
+    let token;
     try {
-      const token = decode(base64Token, { complete: true });
-      logger.debug('Got Token', token);
-      return token;
+      token = decode(base64Token, { complete: true });
     } catch (e) {
       logger.info('Could not decode token', e);
       throw new HttpException(400, 'Token is not not a valid JWT');
     }
+    if (isEmpty(token)) {
+      throw new HttpException(400, 'Token is not not a valid JWT');
+    }
+    logger.debug('Got Token', token);
+    return token;
   }
 
   public verifyToken(base64Token: string, keyOrSecret: Secret) {
