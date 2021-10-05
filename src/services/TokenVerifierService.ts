@@ -41,7 +41,7 @@ class TokenVerifierService {
 
   public verifyToken(base64Token: string, keyOrSecret: Secret) {
     try {
-      verify(base64Token, keyOrSecret, {});
+      verify(base64Token, keyOrSecret, {algorithms: "RS256"});
     } catch (e) {
       logger.info('Could not verify code token', e);
       throw new HttpException(400, 'Token is not valid');
