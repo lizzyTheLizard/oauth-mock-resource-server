@@ -29,11 +29,10 @@ class TokenVerifierService {
     try {
       token = decode(base64Token, { complete: true });
     } catch (e) {
-      logger.info('Could not decode token', e);
-      throw new HttpException(400, 'Token is not not a valid JWT');
+      throw new HttpException(400, e.message);
     }
     if (isEmpty(token)) {
-      throw new HttpException(400, 'Token is not not a valid JWT');
+      throw new HttpException(400, 'No token send in bearer header');
     }
     logger.debug('Got Token', token);
     return token;
@@ -41,10 +40,9 @@ class TokenVerifierService {
 
   public verifyToken(base64Token: string, keyOrSecret: Secret) {
     try {
-      verify(base64Token, keyOrSecret, {algorithms: "RS256"});
+      verify(base64Token, keyOrSecret, { algorithms: ['RS256', 'HS256'] });
     } catch (e) {
-      logger.info('Could not verify code token', e);
-      throw new HttpException(400, 'Token is not valid');
+      throw new HttpException(400, e.message);
     }
   }
 }

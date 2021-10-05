@@ -2,7 +2,7 @@ import { Jwt, Secret } from 'jsonwebtoken';
 import axios from 'axios';
 import { HttpException } from '@/exceptions/HttpException';
 import { logger } from '@utils/logger';
-import {JwksClient, SigningKey } from 'jwks-rsa';
+import { JwksClient, SigningKey } from 'jwks-rsa';
 
 interface Key {
   kid: string;
@@ -22,10 +22,10 @@ interface Jwks {
 class SecretGetterService {
   public async getSecret(token: Jwt): Promise<Secret> {
     return process.env.KEY ?? (await this.getSecretFromIssuer(token));
-  }  
+  }
 
   public async getSecretFromIssuer(token: Jwt): Promise<Secret> {
-    const issuer = token.payload.iss || process.env.ISSUER;
+    const issuer = process.env.ISSUER || token.payload.iss;
     logger.info('Try to get keys from issuer ' + issuer);
     const key = await this.getKeyFromIssuer(issuer, token.header.kid);
     return key.getPublicKey();
@@ -33,7 +33,7 @@ class SecretGetterService {
 
   private async getKeyFromIssuer(issuer: string, kid: string | undefined): Promise<SigningKey> {
     const openIdConfiguration = await this.getOpenIdConfiguration(issuer);
-    const client = new JwksClient({jwksUri: openIdConfiguration.jwks_uri});
+    const client = new JwksClient({ jwksUri: openIdConfiguration.jwks_uri });
     return client.getSigningKey(kid);
   }
 
