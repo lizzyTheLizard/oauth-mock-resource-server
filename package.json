@@ -1,6 +1,6 @@
 {
   "name": "oauth-mock-resource-server",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A mock resource server to test an oauth client",
   "author": "",
   "license": "MIT",
@@ -12,7 +12,8 @@
     "test:watch": "jest --watch",
     "lint": "eslint --ignore-path .gitignore --ext .ts src/",
     "lint:fix": "npm run lint -- --fix",
-    "docker:build": "docker build -t lizzythelizard/oauth-mock-resource-server:0.1 -t lizzythelizard/oauth-mock-resource-server:latest ."
+    "docker:build": "docker build -t lizzythelizard/oauth-mock-resource-server:1.0.0 -t lizzythelizard/oauth-mock-resource-server:latest .",
+    "docker:push": "docker push lizzythelizard/oauth-mock-resource-server:1.0.0 && docker push lizzythelizard/oauth-mock-resource-server:latest"
   },
   "dependencies": {
     "axios": "^0.22.0",
